@@ -3,18 +3,16 @@ require 'kconv'
 class Source < ActiveRecord::Base
   belongs_to :answer
 
-  # アップロードしたファイルの保存先
-  number = User.current.number
-  save_dir_path = "#{Rails.root}/public/source_code/" + "j" + number.to_s[0..1] + "/j" + number.to_s.delete("-") + "/"
+  mount_uploader :source, SourceUploader
 
-  has_attached_file :avatar, path: save_dir_path + ":filename"
+  # ファイルタイプでバリデーション
+  validate :image_valid?, :if => Proc.new{ |user| user.image_changed? && user.errors[:image].blank? }
 
-  # avatarは必須
-  validates_attachment_presence :avatar
-  # *.cしか受け付けない
-  validates_attachment_file_name :avatar, :matches => [/.c\Z/]
-  # 100kB未満のファイルしか受け付けない
-  validates_attachment_size :avatar, :less_than => 100.kilobytes
+  def source_valid?
+    if source.file.content_type != "image/jpeg"
+      errors.add(:source, "不正なファイルが添付されています")
+    end
+  end
 
   def getSourcefile path
     f = open(path, "r")
