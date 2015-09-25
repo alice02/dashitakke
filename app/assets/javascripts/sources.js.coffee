@@ -6,7 +6,7 @@ ready = ->
     showPreview: true
     maxFileCount: 1
     browseClass: 'btn btn-info fileinput-browse-button'
-    browseIcon: ''
+    browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>'
     browseLabel: ' ファイル選択'
     removeClass: 'btn btn-warning'
     removeIcon: ''
