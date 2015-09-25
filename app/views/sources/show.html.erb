@@ -4,7 +4,7 @@
 
 <p>
   <strong>Filename:</strong>
-  <%= @source.avatar_file_name %><br>
+  <%= @source.src.path.split("/")[-1] %><br>
  <strong>Checked_by:</strong>
   <%= @source.answer.checked_by %>
 </p>

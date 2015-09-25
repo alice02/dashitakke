@@ -13,7 +13,7 @@ class SourcesController < ApplicationController
     @answer = Answer.find(@source.answer.id)
     if not current_user.roles.exists?(name: 'member') \
       or @answer.user_id == current_user.id then
-      @cfile = @source.getSourcefile(@source.filepath)
+      @cfile = @source.getSourcefile
     else
       redirect_to root_path, notice: "無効なURLです。"
     end
@@ -42,12 +42,6 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.filename_check and @source.save
         @answer = Answer.find(@source.answer_id)
-
-        filename = source_params[:avatar].original_filename
-        save_dir_path = "#{Rails.root}/public/source_code/" + "j" + current_user.number.to_s[0..1] + "/j" + current_user.number.to_s.delete("-") + "/"
-        @source.filepath = save_dir_path + filename
-        @source.save
-
         # ステータスを更新
         @question = Question.find(@answer.question_id)
         if @question.need_check == "なし"
@@ -79,13 +73,8 @@ class SourcesController < ApplicationController
       u.save
     end
 
-    # 保存先ファイル名の更新
-    filename = source_params[:avatar].original_filename
-    save_dir_path = "#{Rails.root}/public/source_code/" + "j" + current_user.number.to_s[0..1] + "/j" + current_user.number.to_s.delete("-") + "/"
-    @source.filepath = save_dir_path + filename
-
     respond_to do |format|
-      if @source.filename_check(filename) and @source.update(source_params)
+      if @source.filename_check and @source.update(source_params)
         format.html { redirect_to @source, notice: 'Source was successfully updated.' }
         format.json { render :show, status: :ok, location: @source }
       else
@@ -116,6 +105,6 @@ class SourcesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def source_params
-      params.require(:source).permit(:answer_id, :avatar)
+      params.require(:source).permit(:answer_id, :src)
     end
 end

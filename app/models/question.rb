@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
   def getfilename question_id, user_id
   	source = Question.find(question_id).answers.find_by(user_id: user_id).source
   	if source
-  		return source.avatar_file_name
+  		return source.src.path.split("/")[-1]
   	else
   		return "none"
   	end

@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 ready = ->
-  $('#source_avatar').fileinput
+  $('#source_src').fileinput
     showPreview: true
     maxFileCount: 1
     browseClass: 'btn btn-info fileinput-browse-button'

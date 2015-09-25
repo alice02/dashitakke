@@ -3,26 +3,26 @@ require 'kconv'
 class Source < ActiveRecord::Base
   belongs_to :answer
 
-  mount_uploader :source, SourceUploader
+  mount_uploader :src, SourceUploader
 
   # ファイルタイプでバリデーション
-  validate :image_valid?, :if => Proc.new{ |user| user.image_changed? && user.errors[:image].blank? }
+  validate :source_valid?, :if => Proc.new{ |source| source.src_changed? && source.errors[:src].blank? }
 
   def source_valid?
-    if source.file.content_type != "image/jpeg"
+    if src.file.content_type != "text/x-c"
       errors.add(:source, "不正なファイルが添付されています")
     end
   end
 
-  def getSourcefile path
-    f = open(path, "r")
+  def getSourcefile
+    f = open(self.src.path, "r")
     # 文字コードをUTF-8に変換する。それでも不正なバイト文字が含まれていたら'?'で置換
     srcFile = f.read.toutf8.scrub('?')
     f.close
     return srcFile
   end
 
-  def filename_check original_filename = self.avatar.original_filename
+  def filename_check original_filename = self.src.path.split("/")[-1]
     no = self.answer.question.index
     date = self.answer.question.paper.given_date.to_s
     filename = "No" + date.split("-")[1] + date.split("-")[2] + "_" + no.to_s + ".c"
