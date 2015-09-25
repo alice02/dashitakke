@@ -55,4 +55,6 @@ group :development do
   gem "meta_request"
 end
 
-gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
+gem 'carrierwave'
+gem 'ruby-filemagic'
+gem 'carrierwave-magic'
