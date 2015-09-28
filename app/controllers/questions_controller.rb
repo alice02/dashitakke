@@ -73,6 +73,6 @@ class QuestionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
-      params.require(:question).permit(:index, :need_check, :point, :contents, :paper_id)
+      params.require(:question).permit(:index, :need_check, :point, :contents, :paper_id, :extension, :mime)
     end
 end

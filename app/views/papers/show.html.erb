@@ -62,6 +62,14 @@
 		<%= f.select :need_check, ["なし","教員", "学生"] %>
 	</div>
 
+  <div class="field">
+    <%= f.select :extension, ["c"]%>
+  </div>
+
+  <div class="field">
+    <%= f.select :mime, ["text/x-c"]%>
+  </div>
+
 	<div class="field">
 		<%= f.number_field :point %>
 	</div>
