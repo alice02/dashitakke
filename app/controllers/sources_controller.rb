@@ -21,6 +21,7 @@ class SourcesController < ApplicationController
 
   # GET /sources/new
   def new
+    gon.hoge = current_user.name
     @answer = current_user.answers.where(question_id: params[:id]).first()
     if @answer.status == "UNDONE"
       @source = Source.new
