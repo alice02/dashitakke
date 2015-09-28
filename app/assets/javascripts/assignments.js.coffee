@@ -5,4 +5,3 @@ ready = ->
 	$('.progress .progress-bar').progressbar({display_text: 'fill'})
 
 $(document).ready(ready)
-$('.progress .progress-bar').progressbar()
