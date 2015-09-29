@@ -40,7 +40,7 @@ class SourcesController < ApplicationController
     @source = Source.new(source_params)
 
     respond_to do |format|
-      if @source.filename_check and @source.save
+      if @source.save
         @answer = Answer.find(@source.answer_id)
         # ステータスを更新
         @question = Question.find(@answer.question_id)
@@ -74,7 +74,7 @@ class SourcesController < ApplicationController
     end
 
     respond_to do |format|
-      if @source.filename_check and @source.update(source_params)
+      if @source.update(source_params)
         format.html { redirect_to @source, notice: 'Source was successfully updated.' }
         format.json { render :show, status: :ok, location: @source }
       else
