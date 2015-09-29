@@ -15,7 +15,7 @@ class Question < ActiveRecord::Base
   	if source
   		return source.src.file.filename
   	else
-  		return "none"
+  		return false
   	end
   end
 end
