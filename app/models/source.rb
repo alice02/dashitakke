@@ -17,7 +17,7 @@ class Source < ActiveRecord::Base
   end
 
   def source_filename_valid?
-    original_filename = src.path.split("/")[-1]
+    original_filename = src.file.filename
     number = answer.question.index
     date = answer.question.paper.given_date.to_s
     filename = "No" + date.split("-")[1] + date.split("-")[2] + "_" + number.to_s + "." + answer.question.extension
