@@ -15,19 +15,18 @@ class SourcesController < ApplicationController
       or @answer.user_id == current_user.id then
       @cfile = @source.getSourcefile
     else
-      redirect_to root_path, notice: "無効なURLです。"
+      redirect_to root_path, alert: "無効なURLです。"
     end
   end
 
   # GET /sources/new
   def new
-    gon.hoge = current_user.name
     @answer = current_user.answers.where(question_id: params[:id]).first()
     if @answer.status == "UNDONE"
       @source = Source.new
       @source.answer = @answer
     else
-      redirect_to assignment_path(@answer.assignment), notice: "すでに提出済です。"
+      redirect_to assignment_path(@answer.assignment), alert: "すでに提出済です。"
     end
   end
 
