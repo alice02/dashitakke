@@ -58,4 +58,3 @@ end
 gem 'carrierwave'
 gem 'ruby-filemagic'
 gem 'carrierwave-magic'
-gem 'gon'
