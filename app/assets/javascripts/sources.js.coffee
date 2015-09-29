@@ -14,11 +14,8 @@ ready = ->
     uploadClass: 'btn btn-success fileinput-upload-button'
     uploadIcon: '<i class="glyphicon glyphicon-upload"></i>'
     uploadLabel: ' アップロード'
-    allowedFileExtensions: ['c']
+    allowedFileExtensions: []
     msgValidationError: '''
-      <span class="text-danger">
-        <i class="glyphicon glyphicon-exclamation-sign"></i> 拡張子が C のファイルのみ有効です。
-      </span>
     '''
 
 $(document).ready(ready)
