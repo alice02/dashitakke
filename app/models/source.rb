@@ -20,10 +20,9 @@ class Source < ActiveRecord::Base
     original_filename = src.path.split("/")[-1]
     number = answer.question.index
     date = answer.question.paper.given_date.to_s
-    filename = "No" + date.split("-")[1] + date.split("-")[2] + "_" + number.to_s + ".c"
-    puts number, date, filename
+    filename = "No" + date.split("-")[1] + date.split("-")[2] + "_" + number.to_s + "." + answer.question.extension
     if original_filename != filename
-      errors.add(:source, "不正なファイル名です。指定したファイル名で提出してください。")
+      errors.add(:source, "不正なファイル名[" + original_filename + "]です。指定したファイル名[" + filename + "]で提出してください。")
     end
   end
 
