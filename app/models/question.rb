@@ -10,7 +10,7 @@ class Question < ActiveRecord::Base
                                     greater_than_or_equal_to: 0 }
 
 
-  def getfilename question_id, user_id
+  def isSourceUploaded question_id, user_id
   	source = Question.find(question_id).answers.find_by(user_id: user_id).source
   	if source
   		return source.src.file.filename

@@ -1,6 +1,3 @@
-<p id="notice"><%= notice %></p>
-
-
 <h3>課題番号：第<%= @assignment.paper.index %>回</h3>
 <h4>出題日：<%= simple_date(@assignment.paper.given_date) %></h4>
 
@@ -33,10 +30,10 @@
           <%= link_to "詳細", question_path(question), class: "btn btn-info btn-sm" %>
         </td>
         <td>
-        	<% if question.getfilename(question.id, current_user)=="none" %>
+        	<% if question.isSourceUploaded(question.id, current_user) == false %>
             <%= link_to "提出", new_source_path(id:question.id), class: "btn btn-warning btn-sm" %>
           <% else %>
-            <%= link_to question.getfilename(question.id, current_user.id), {controller: :sources, action: :show, :id => question.answers.find_by(user_id: current_user).source}, class: "btn btn-default btn-sm" %>
+            <%= link_to question.isSourceUploaded(question.id, current_user.id), {controller: :sources, action: :show, :id => question.answers.find_by(user_id: current_user).source}, class: "btn btn-default btn-sm" %>
           <% end %>
         </td>
       <% end %>
