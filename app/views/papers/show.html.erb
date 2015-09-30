@@ -1,26 +1,12 @@
-<p id="notice"><%= notice %></p>
+<h3>課題番号：<%= @paper.index %></h3>
+<h4>出題日：<%= simple_date(@paper.given_date) %></h4>
+<h4>出題状態：<% if @paper.set %>出題済<% else %>未出題<% end %></h4>
 
-<p>
-  <strong>Index:</strong>
-  <%= @paper.index %>
-</p>
-
-<p>
-  <strong>Given date:</strong>
-  <%= simple_date(@paper.given_date) %>
-</p>
-
-<p>
-  <strong>Set:</strong>
-  <%= @paper.set %>
-</p>
-
-<% if @paper.set %>出題済<% else %>未<% end %>
 <br>
 <% if @paper.set %>
-  <%= link_to '取り消し', {action: :reset}, method: :put %>
+  <%= link_to '出題を取り消す', reset_paper_path(@paper.id), method: :put, class: "btn btn-danger btn-lg" %>
 <% else %>
-  <%= link_to '出題', {action: :set}, method: :put %>
+  <%= link_to '出題する', set_paper_path(@paper.id), method: :put, class: "btn btn-primary btn-lg" %>
 <% end %>
 
 <hr>
@@ -29,8 +15,7 @@
 <%= render 'papers/students' %>
 
 <% else %>
-<hr>
-<table border=1>
+<table class="table table-hover">
   <thead>
     <tr>
     	<th>問題番号</th>
@@ -50,43 +35,52 @@
 		<td><%= link_to '編集',
                 { controller: :questions,
                   action: :edit,
-                  :id => question } %></td>
-        <td><%= link_to '削除',
+                  :id => question },
+                  :class => "btn btn-sm btn-warning" %>
+        <%= link_to '削除',
                 { controller: :questions,
                   action: :destroy,
-                  :id => question},
-                  :confirm => 'Are you sure?',
+                  :id => question },
+                  :data => { :confirm => 'Are you sure?' },
+                  :class => "btn btn-sm btn-danger",
                   :method => 'delete' %></td>
-<% #TODO: confirmされない %>
 	<% end %>
-    </tr>
+  </tr>
 </tbody>
 </table>
 <hr>
 
-<%= form_for @question, :url => {controller: :questions, action: :create, :paper_id => @paper} do |f| %>
+<%= bootstrap_form_for @question, :url => {controller: :questions, action: :create, :paper_id => @paper} do |f| %> 
 
 	<div class="field">
 		<%= f.label :index %>
-		<%= f.number_field :index %>
+    <p><%= @question.index %></p>
+		<%= f.hidden_field :index %>
 	</div>
 
 	<div class="field">
-		<%= f.label :need_check %><br>
-		<%= f.select :need_check,["なし","教員", "学生"] %>
+		<%= f.select :need_check, ["なし","教員", "学生"] %>
 	</div>
 
+  <div class="field">
+    <%= f.select :extension, ["c"]%>
+  </div>
+
+  <div class="field">
+    <%= f.select :mime, ["text/x-c"]%>
+  </div>
+
 	<div class="field">
-		<%= f.label :point %><br>
 		<%= f.number_field :point %>
 	</div>
 
 	<div class="field">
-		<%= f.label :contents %><br>
 		<%= f.text_area :contents %>
 	</div>
 
-	<%= submit_tag '追加' %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
 <% end %>
 
 <hr>

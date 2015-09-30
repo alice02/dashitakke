@@ -1,9 +1,14 @@
-  <p>ファイルの差し替え</p>
-  <%= form_for(@source, url: {controller: :sources, action: :update}, html: {multipart: true}) do |f| %>
-  <div class="field">
-    <%= f.file_field :avatar %>
-  </div>
-  <div class="actions">
-    <%= submit_tag "差し替え" %>
-  </div>
- <% end %>
+	<%= bootstrap_form_for(@source) do |f| %>
+    <% if @source.errors.any? %>
+    <div class="alert alert-danger fade in">
+      <h5><%= pluralize(@source.errors.count, "error") %> prohibited this source from being saved:</h5>
+      <ul>
+      <% @source.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  		<%= f.hidden_field :answer_id, value: @source.answer_id %>
+  		<%= f.file_field :src, hide_label: true %>
+	<% end %>

@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @source = Source.new
   end
 
   def new
@@ -18,6 +19,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     @question.paper_id = params[:paper_id]
+    @paper = Paper.find(params[:paper_id])
 
     respond_to do |format|
      if @question.save
@@ -28,7 +30,7 @@ class QuestionsController < ApplicationController
         # TODO: noticeが表示されない
         format.json { render :show, status: :created, location: @question }
       else
-        format.html { render :new }
+        format.html { render :template=> "papers/show", :locals => { :paper => @paper } }
         format.json { render json: @question.errors, status: :unprocessable_entity }
       end
     end
@@ -50,7 +52,13 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    paper_id = @question.paper_id
     @question.destroy
+    # indexを振り直す
+    @questions = Question.where(paper_id: paper_id)
+    @questions.each_with_index do |q, i|
+      q.update(:index => (i+1))
+    end
     respond_to do |format|
       format.html { redirect_to controller: :papers, action: :show, :id => @question.paper_id, notice: 'Question was successfully destroyed.' }
       format.json { head :no_content }
@@ -65,6 +73,6 @@ class QuestionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
-      params.require(:question).permit(:index, :need_check, :point, :contents, :paper_id)
+      params.require(:question).permit(:index, :need_check, :point, :contents, :paper_id, :extension, :mime)
     end
 end

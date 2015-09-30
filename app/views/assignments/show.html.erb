@@ -1,20 +1,18 @@
-<p id="notice"><%= notice %></p>
-
-
 <h3>課題番号：第<%= @assignment.paper.index %>回</h3>
 <h4>出題日：<%= simple_date(@assignment.paper.given_date) %></h4>
 
 <hr>
 
-<table border=1>
+<table class="table table-border">
   <thead>
     <tr>
       <th>問題番号</th>
-      <th width="200">設問内容</th>
+      <th>質問内容</th>
       <th>要チェック</th>
       <th>ステータス</th>
       <th>Checked by</th>
-      <th>提出ファイル</th>
+      <th>詳細</th>
+      <th>提出</th>
     </tr>
   </thead>
 
@@ -22,27 +20,27 @@
     <% @assignment.paper.questions.each do |question| %>
       <tr>
         <td><%= question.index %></td>
-        <td><%= question.contents %></td>
-        <td><%= question.need_check %></td>
-        <td><%= Answer.where(question_id: question).find_by(user_id: current_user).status %></td>
-        <td><%= Answer.where(question_id: question).find_by(user_id: current_user).checked_by %></td>
         <td>
-        	<% if question.getfilename(question.id, current_user)=="none" %>
-            <%= form_for(@source, url: {controller: :sources, action: :create, answer_id: Answer.where(question_id: question).find_by(user_id: current_user)}) do |f| %>
-            <div class="field">
-              <%= f.file_field :avatar %>
-            </div>
-            <div class="actions">
-              <%= submit_tag "Upload" %>
-            </div>
-           <% end %>
-         <% else %>
-         <%= link_to question.getfilename(question.id, current_user.id), {controller: :sources, action: :show, :id => question.answers.find_by(user_id: current_user).source} %>
-         <% end %>
+        <%= truncate(question.contents) %>
+        </td>
+        <td><%= question.need_check %></td>
+        <td><%= question.answers.find_by(user_id: current_user).status %></td>
+        <td><%= question.answers.find_by(user_id: current_user).checked_by %></td>
+        <td>
+          <%= link_to "詳細", question_path(question), class: "btn btn-info btn-sm" %>
+        </td>
+        <td>
+        	<% if question.isSourceUploaded(question.id, current_user) == false %>
+            <%= link_to "提出", new_source_path(id:question.id), class: "btn btn-warning btn-sm" %>
+          <% else %>
+            <%= link_to question.isSourceUploaded(question.id, current_user.id), {controller: :sources, action: :show, :id => question.answers.find_by(user_id: current_user).source}, class: "btn btn-default btn-sm" %>
+          <% end %>
         </td>
       <% end %>
     </tr>
   </tbody>
 </table>
 
-<%= link_to 'Back', assignments_index_path %>
+<%= link_to assignments_path, :class => "btn btn-default" do %>
+  <span class="glyphicon glyphicon-arrow-left"></span> Back
+<% end %>

@@ -1,4 +1,8 @@
-<h1>New source</h1>
+<h1>課題のアップロード</h1>
 
+<%= render 'sources/student' %>
 
-<%= link_to 'Back', sources_path %>
+<%= link_to assignment_path(@answer.assignment), :class => "btn btn-default" do %>
+	<span class="glyphicon glyphicon-arrow-left"></span> Back
+<% end %>
+

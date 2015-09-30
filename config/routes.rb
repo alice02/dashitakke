@@ -1,13 +1,12 @@
 Rails.application.routes.draw do
-  get 'assignments/index'
 
-  get 'assignments/show'
+  resources :assignments, only: [:index, :show]
 
   resources :answers
 
-  resources :sources
+  resources :sources, except: [:index, :destroy]
 
-  resources :questions
+  resources :questions, except: :index
 
   resources :papers do
     put :set, on: :member

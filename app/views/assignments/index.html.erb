@@ -1,6 +1,6 @@
 <h1>学生 提出用画面</h1>
 
-<table border=1>
+<table class="table table-border">
   <thead>
     <tr>
       <th>課題番号</th>
@@ -14,14 +14,13 @@
   <tbody>
     <% @assignments.each do |assignment| %>
       <tr>
-        <td><%= link_to '第' + assignment.paper.index.to_s + '回', {action: :show, id: assignment.id} %></td>
+        <td><%= link_to '第' + assignment.paper.index.to_s + '回', assignment_path(assignment) %></td>
         <td><%= simple_date(assignment.paper.given_date)%></td>
         <td><span class="badge"><%= assignment.paper.questions.length %></span></td>
         <td><span class="badge"><%= assignment.undone_answers.length %></span></td>
         <td>
          <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="<%= assignment.progress.to_s %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= assignment.progress.to_s+"%" %>;">
-            <%= assignment.progress %>%
+          <div class="progress-bar" role="progressbar" data-transitiongoal="<%= assignment.progress.to_s %>">
           </div>
         </div>
         </td>
@@ -29,3 +28,10 @@
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $('.progress .progress-bar').progressbar();
+  $(document).ready(function() {
+    $('.progress .progress-bar').progressbar({display_text: 'fill'});
+  });
+</script>

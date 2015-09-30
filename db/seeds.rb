@@ -26,6 +26,7 @@ user.number = "00-000"
 user.name = "管理者"
 user.email = "hoge@gmail.com"
 user.password = "hogehogehoge"
+user.fighting_power = 530000
 role = Role.where(name: 'superadmin')
 user.roles << role
 role = Role.where(name: 'admin')

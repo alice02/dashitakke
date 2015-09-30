@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140928123715) do
+ActiveRecord::Schema.define(version: 20150928105114) do
 
   create_table "answers", force: true do |t|
     t.string   "status",        null: false
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20140928123715) do
     t.integer  "paper_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "extension"
+    t.string   "mime"
   end
 
   add_index "questions", ["paper_id"], name: "index_questions_on_paper_id"
@@ -71,17 +73,10 @@ ActiveRecord::Schema.define(version: 20140928123715) do
   end
 
   create_table "sources", force: true do |t|
-    t.string   "filename"
-    t.string   "content_type"
-    t.integer  "filesize"
-    t.binary   "code"
+    t.string   "src"
+    t.integer  "answer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "answer_id"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
-    t.datetime "avatar_updated_at"
   end
 
   add_index "sources", ["answer_id"], name: "index_sources_on_answer_id"
@@ -102,6 +97,7 @@ ActiveRecord::Schema.define(version: 20140928123715) do
     t.integer  "attendnumber",                        null: false
     t.string   "number",                              null: false
     t.string   "name",                                null: false
+    t.integer  "fighting_power",         default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

@@ -1,9 +1,7 @@
-<p>課題チェック</p>
-  <%= form_for(@source.answer, html: {multipart: true}) do |f| %>
-  <label>DONE:<%= f.radio_button :status, 'DONE' %></label><br />
-  <label>UPLOAD:<%= f.radio_button :status, 'UPLOAD' %></label><br />
-  <label>WAITING:<%= f.radio_button :status, 'WAITING' %></label>
-  <div class="actions">
-    <%= submit_tag "チェック" %>
-  </div>
+<h4>課題チェック</h4>
+  <%= bootstrap_form_for(@source.answer, html: {multipart: true}) do |f| %>
+ 	<%= f.radio_button :status, 'DONE', label: "DONE"%>
+  	<%= f.radio_button :status, 'UPLOAD', label: "UPLOAD" %>
+	<%= f.radio_button :status, 'WAITING', label: "WAITING" %>
+    <%= f.submit "チェック" %>
   <% end %>

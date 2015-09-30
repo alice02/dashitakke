@@ -13,7 +13,7 @@ Your role is 'member'.
 
 <h1>課題提出状況</h1>
 
-<table border=1>
+<table class="table table-hover">
   <thead>
     <tr>
       <th>課題番号</th>
@@ -39,5 +39,5 @@ Your role is 'member'.
 <br>
 
 <% if can? :manage, @user %>
-<%= link_to '新しい課題を作る', new_paper_path %>
+<%= link_to '新しい課題を作る', new_paper_path, :class => "btn btn-default" %>
 <% end %>

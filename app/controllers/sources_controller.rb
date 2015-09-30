@@ -11,14 +11,23 @@ class SourcesController < ApplicationController
   # GET /sources/1.json
   def show
     @answer = Answer.find(@source.answer.id)
-    f = open(@source.avatar.path, "r")
-    @cfile = f.read
-    f.close
+    if not current_user.roles.exists?(name: 'member') \
+      or @answer.user_id == current_user.id then
+      @cfile = @source.getSourcefile
+    else
+      redirect_to root_path, alert: "無効なURLです。"
+    end
   end
 
   # GET /sources/new
   def new
-    @source = Source.new
+    @answer = current_user.answers.where(question_id: params[:id]).first()
+    if @answer.status == "UNDONE"
+      @source = Source.new
+      @source.answer = @answer
+    else
+      redirect_to assignment_path(@answer.assignment), alert: "すでに提出済です。"
+    end
   end
 
   # GET /sources/1/edit
@@ -30,21 +39,23 @@ class SourcesController < ApplicationController
   def create
     @source = Source.new(source_params)
 
-    @source.filename = params[:original_filename]
-    @source.content_type = "texttext"
-    @source.filesize = 520000
-    @source.code = "oh"
-    @source.answer_id = params[:answer_id]
-
     respond_to do |format|
       if @source.save
-
         @answer = Answer.find(@source.answer_id)
-        @answer.update(status: "UPLOAD")
+        # ステータスを更新
+        @question = Question.find(@answer.question_id)
+        if @question.need_check == "なし"
+          @answer.update(status: "DONE")
+          power = current_user.increment(:fighting_power, @question.point)
+          current_user.save
+        else
+          @answer.update(status: "UPLOAD")
+        end
 
         format.html { redirect_to @source, notice: 'Source was successfully created.' }
         format.json { render :show, status: :created, location: @source }
       else
+        @answer = Answer.find(@source.answer_id)
         format.html { render :new }
         format.json { render json: @source.errors, status: :unprocessable_entity }
       end
@@ -54,29 +65,23 @@ class SourcesController < ApplicationController
   # PATCH/PUT /sources/1
   # PATCH/PUT /sources/1.json
   def update
-    '''
-    f = source_params[:code]
-    print f
-    source = {}
-    if f != nil
-      source[:avatar_file_name] = f.original_filename
-      source[:avatar_content_type] = f.content_type
-      source[:avatar_file_size] = f.size
-      source[:code] = f.read
+    # 戦闘力の更新
+    if (@source.answer.status == "UPLOAD" and source_params[:status] == "DONE") \
+      or (@source.answer.status == "UPLOAD" and source_params[:status] == "DONE")
+      u = @source.answer.user
+      u.increment(:fighting_power, @source.answer.question.point)
+      u.save
     end
-
-    print "source"
-    print source
-'''
 
     respond_to do |format|
       if @source.update(source_params)
-        print "success!"
         format.html { redirect_to @source, notice: 'Source was successfully updated.' }
         format.json { render :show, status: :ok, location: @source }
       else
-        print "error..."
-        format.html { render :edit }
+        src = Source.find(@source).src
+        @source.src = src
+        @cfile = @source.getSourcefile
+        format.html { render :template => "sources/show", :locals => { :source => @source, :cfile => @cfile } }
         format.json { render json: @source.errors, status: :unprocessable_entity }
       end
     end
@@ -100,6 +105,6 @@ class SourcesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def source_params
-      params.require(:source).permit(:filename, :content_type, :filesize, :code, :answer_id, :avatar)
+      params.require(:source).permit(:answer_id, :src)
     end
 end

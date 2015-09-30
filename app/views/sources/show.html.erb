@@ -1,26 +1,28 @@
-<p id="notice"><%= notice %></p>
-
 <h3>課題番号：第<%= @source.answer.assignment.paper.index %>回</h3>
 <h4>出題日：<%= simple_date(@source.answer.assignment.paper.given_date) %></h4>
 <h4>問題番号：<%= @source.answer.question.index %>問目</h4>
 
 <p>
   <strong>Filename:</strong>
-  <%= @source.avatar_file_name %><br>
+  <%= @source.src.file.filename %><br>
  <strong>Checked_by:</strong>
   <%= @source.answer.checked_by %>
 </p>
 
-<pre class="brush: c">
-  <%= @cfile %>
+<pre class="brush:c">
+<%= @cfile %>
 </pre>
 
 <hr>
   <% if current_user.roles.exists?(name: 'member') %>
+  <h4>差し替え</h4>
   <%= render 'sources/student' %>
   <% else %>
   <%= render 'sources/teacher' %>
   <% end %>
 <hr>
 
-<%= link_to 'Back', assignments_show_path(id: @source.answer.assignment) %>
+<%= link_to assignment_path(@source.answer.assignment), :class => "btn btn-default" do %>
+	<span class="glyphicon glyphicon-arrow-left"></span> Back
+<% end %>
+

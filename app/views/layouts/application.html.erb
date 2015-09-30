@@ -7,11 +7,6 @@
     <title><%= content_for?(:title) ? yield(:title) : "Dashitakke" %></title>
     <%= csrf_meta_tags %>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js" type="text/javascript"></script>
-    <![endif]-->
-
     <%= stylesheet_link_tag "application", :media => "all" %>
 
     <!-- For third-generation iPad with high-resolution Retina display: -->
@@ -38,64 +33,62 @@
 
     <link type="text/css" rel="stylesheet" href="/styles/shCore.css"/>
     <link type="text/css" rel="Stylesheet" href="/styles/shThemeDefault.css" />
-    <script type="text/javascript" src="/scripts/XRegExp.js"></script>
     <script type="text/javascript" src="/scripts/shCore.js"></script>
     <script type="text/javascript" src="/scripts/shAutoloader.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js" type="text/javascript"></script>
+    <![endif]-->
   </head>
   <body>
 
-    <div class="navbar navbar-static-top">
+    <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href=<%= root_path %>>Dashitakke （課題提出管理システム）</a>
-        <div class="nav-collapse collapse navbar-responsive-collapse">
-          <ul class="nav navbar-nav">
-            <li><%= link_to "Link1", "/path1"  %></li>
-            <li><%= link_to "Link2", "/path2"  %></li>
-            <li><%= link_to "Link3", "/path3"  %></li>
-          </ul>
+        <a class="navbar-brand" href="/">Dashitakke （課題提出管理システム）</a>
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <% if user_signed_in? %>
+            <ul class="nav navbar-nav navbar-right">
+              <li><p class="navbar-text"><strong>戦闘力 <%= current_user.fighting_power %></strong></p></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-user"></span> 
+                  <strong><%= current_user.name %></strong>
+                  <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                      <div class="row">
+                        <div class="col-lg-1">
+                          <p class="text-center">
+                          </p>
+                        </div>
+                        <div class="col-lg-11">
+                          <p class="text-left"><strong>　学籍番号：<%= current_user.number %></strong></p>
+                          <p class="text-left"><strong>　出席番号：<%= current_user.attendnumber %></strong></p>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="divider"></li>                    
+                    <li><%= link_to "パスワード変更 ", edit_user_registration_path %></li>
+                    <li class="divider"></li>
+                    <li><%= link_to "ログアウト", destroy_user_session_path, method: "delete" %></li>
+                  </ul>
+                </li>
+              </ul> 
+          <% end %>
         </div>
       </div>
     </div>
 
     <div class="container">
       <div class="row">
-
-
-
-        <div class="col-lg-3">
-          <div class="well sidebar-nav">
-            <h3>Sidebar</h3>
-            <ul class="nav nav-list">
-              <li class="nav-header"></li>
-              <% if current_user %>
-              <li><%= link_to "ログアウト", destroy_user_session_path, :method => :delete %></li>
-              <h3>Status</h3>
-              <li>出席番号:<%= current_user.attendnumber %></li>
-              <li>学籍番号:<%= current_user.number %></li>
-              <li>氏名:<%= current_user.name %></li>
-              <li>e-mail:<%= current_user.email %></li>
-              <!--
-              <% current_user.roles.each_with_index do |r, i| %>
-              <li>権限[<%= i %>]=<%= r.name %> </li>
-              <% end %>-->
-              <% end %>
-              <h3>戦闘力</h3>
-              <h4>45433</h4>
-              <br>
-              <h3>Link</h3>
-              <li><%= link_to "木更津高専", "http://www.kisarazu.ac.jp/"  %></li>
-              <li><%= link_to "情報工学科", "http://www.kisarazu.ac.jp/gakka/info/public_html/laboratory.php"  %></li>
-              <li><%= link_to "Researchmap:oeda", "http://researchmap.jp/read0075328/"  %></li>
-              <li><%= link_to "YouTube:C言語J2", "https://www.youtube.com/channel/UCh9WEncCjVqbLRIL67IoV3w"  %></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <div class="col-lg-9">
+        <div class="col-lg-12">
           <%= bootstrap_flash %>
           <%= yield %>
         </div>
@@ -108,8 +101,10 @@
     </div> <!-- /container -->
 
     <script type="text/javascript">
-    SyntaxHighlighter.autoloader('cpp c ../scripts/shBrushCpp.js');
-    SyntaxHighlighter.all();
+      SyntaxHighlighter.autoloader('cpp c ../scripts/shBrushCpp.js');
+      SyntaxHighlighter.all();
+      $('.progress .progress-bar').progressbar();
     </script>
+
   </body>
 </html>
