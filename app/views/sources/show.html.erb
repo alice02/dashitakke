@@ -22,7 +22,12 @@
   <% end %>
 <hr>
 
+<% if current_user.roles.exists?(name: 'member') %>
 <%= link_to assignment_path(@source.answer.assignment), :class => "btn btn-default" do %>
 	<span class="glyphicon glyphicon-arrow-left"></span> Back
 <% end %>
-
+<% else %>
+<%= link_to paper_path(@source.answer.assignment.paper), :class => "btn btn-default" do %>
+  <span class="glyphicon glyphicon-arrow-left"></span> Back
+<% end %>
+<% end %>
