@@ -17,7 +17,14 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :users
+
+  devise_for :users, skip: :registrations
+  devise_scope :user do
+    resource :user_registration,
+      only: [:edit, :update],
+      path: 'users',
+      controller: 'devise/registrations'
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
