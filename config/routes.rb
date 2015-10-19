@@ -2,9 +2,9 @@ Rails.application.routes.draw do
 
   resources :assignments, only: [:index, :show]
 
-  resources :answers
+  resources :answers, except: [:index, :edit, :destroy]
 
-  resources :sources, except: [:index, :destroy]
+  resources :sources, except: [:index, :edit, :destroy]
 
   resources :questions, except: :index
 
